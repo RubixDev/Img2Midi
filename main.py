@@ -7,7 +7,7 @@ from tkinter import messagebox
 from tkinter import ttk
 
 
-def window(height=300, width=550):
+def window(height=350, width=550):
     # Window properties
     root = tk.Tk()
     root.resizable(False, False)
@@ -21,6 +21,7 @@ def window(height=300, width=550):
 
     def save_as_button_func():
         save_path = filedialog.asksaveasfilename(filetypes=[('MIDI files', '*.mid')])
+        save_path += '.mid' if save_path[-4:] != '.mid' else ''
         save_as_label.config(text=save_path)
 
     # Canvas and Frame
@@ -30,20 +31,60 @@ def window(height=300, width=550):
     frame = tk.Frame(root, bd=15)
     frame.place(relheight=1, relwidth=1)
 
+    padx = 15
+    pady = 10
+
     # 1st row: choose image dialog
+    row = 0
+
     choose_image_button = ttk.Button(frame, text='Choose Image', width=20, command=choose_image_button_func)
-    choose_image_button.grid(column=0, row=0, padx=20, pady=10)
+    choose_image_button.grid(column=0, row=row, padx=padx, pady=pady)
 
     choose_image_label = ttk.Label(frame, text='')
-    choose_image_label.grid(column=1, row=0, padx=20, pady=10, columnspan=4, sticky='W')
+    choose_image_label.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
 
     # 2nd row: save as dialog
+    row += 1
+
     save_as_button = ttk.Button(frame, text='Save as', width=20, command=save_as_button_func)
-    save_as_button.grid(column=0, row=1, padx=20, pady=10)
+    save_as_button.grid(column=0, row=row, padx=padx, pady=pady)
 
     save_as_label = ttk.Label(frame, text='')
-    save_as_label.grid(column=1, row=1, padx=20, pady=10, columnspan=4, sticky='W')
+    save_as_label.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
 
+    # 3rd row: duration input
+    row += 1
+
+    duration_label = ttk.Label(frame, text='Duration in seconds:')
+    duration_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+
+    duration_entry_text = tk.StringVar()
+    duration_entry_text.set('60')
+    duration_entry = ttk.Entry(frame, width=10, textvariable=duration_entry_text, justify='right')
+    duration_entry.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+
+    # 4th row: height input
+    row += 1
+
+    height_label = ttk.Label(frame, text='Height in notes:')
+    height_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+
+    height_entry_text = tk.StringVar()
+    height_entry_text.set('100')
+    height_entry = ttk.Entry(frame, width=10, textvariable=height_entry_text, justify='right')
+    height_entry.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+
+    # 5th row: draw mode toggle
+    row += 1
+
+    draw_mode_label = ttk.Label(frame, text='Draw Mode:')
+    draw_mode_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+
+    draw_mode_checkbutton_state = tk.IntVar()
+    draw_mode_checkbutton_state.set(1)
+    draw_mode_checkbutton = ttk.Checkbutton(frame, variable=draw_mode_checkbutton_state, takefocus=False)
+    draw_mode_checkbutton.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    
     # Start Window
     root.mainloop()
 
