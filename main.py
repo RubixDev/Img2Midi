@@ -1,5 +1,28 @@
 from PIL import Image
 from midiutil import MIDIFile
+import threading
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
+from tkinter import ttk
+
+
+def window(height=300, width=500):
+    root = tk.Tk()
+    root.resizable(False, False)
+    root.title('Img2Midi')
+    root.iconbitmap(default='logo.ico')
+    ttk.Style().theme_use('vista')
+
+    # Window properties
+    canvas = tk.Canvas(root, height=height, width=width)
+    canvas.pack()
+
+    frame = tk.Frame(root, bd=15)
+    frame.place(relheight=1, relwidth=1)
+
+    # Start Window
+    root.mainloop()
 
 
 def get_info():
@@ -118,6 +141,7 @@ def write_midi(filename, colors, draw_mode):
 
 
 def main():
+    threading.Thread(target=window).start()
     info = get_info()
     write_midi(info[1], get_pixel_averages(int((120 / 60) * info[2]), info[0], info[4]), info[3])
 
