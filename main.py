@@ -7,7 +7,7 @@ from tkinter import messagebox
 from tkinter import ttk
 
 
-def window(height=300, width=500):
+def window(height=300, width=550):
     # Window properties
     root = tk.Tk()
     root.resizable(False, False)
@@ -17,11 +17,11 @@ def window(height=300, width=500):
 
     def choose_image_button_func():
         img_path = filedialog.askopenfilename(filetypes=[('Image files', '*.png *.jpg *.jpeg *.gif')])
-        print(img_path)
+        choose_image_label.config(text=img_path)
 
     def save_as_button_func():
-        filename = filedialog.asksaveasfilename(filetypes=[('MIDI files', '*.mid')])
-        print(filename)
+        save_path = filedialog.asksaveasfilename(filetypes=[('MIDI files', '*.mid')])
+        save_as_label.config(text=save_path)
 
     # Canvas and Frame
     canvas = tk.Canvas(root, height=height, width=width)
@@ -30,12 +30,19 @@ def window(height=300, width=500):
     frame = tk.Frame(root, bd=15)
     frame.place(relheight=1, relwidth=1)
 
-    # 1st row: File Dialogs
-    choose_image_button = ttk.Button(frame, text='Choose Image', command=choose_image_button_func)
-    choose_image_button.grid(column=0, row=0, padx=20, ipadx=20, columnspan=2)
+    # 1st row: choose image dialog
+    choose_image_button = ttk.Button(frame, text='Choose Image', width=20, command=choose_image_button_func)
+    choose_image_button.grid(column=0, row=0, padx=20, pady=10)
 
-    save_as_button = ttk.Button(frame, text='Save as', command=save_as_button_func)
-    save_as_button.grid(column=2, row=0, padx=20, ipadx=20, columnspan=2)
+    choose_image_label = ttk.Label(frame, text='')
+    choose_image_label.grid(column=1, row=0, padx=20, pady=10, columnspan=4, sticky='W')
+
+    # 2nd row: save as dialog
+    save_as_button = ttk.Button(frame, text='Save as', width=20, command=save_as_button_func)
+    save_as_button.grid(column=0, row=1, padx=20, pady=10)
+
+    save_as_label = ttk.Label(frame, text='')
+    save_as_label.grid(column=1, row=1, padx=20, pady=10, columnspan=4, sticky='W')
 
     # Start Window
     root.mainloop()
@@ -55,9 +62,9 @@ def get_info():
             continue
         break
     while 1:
-        filename = input('Where should the MIDI file be saved?\n')
+        save_path = input('Where should the MIDI file be saved?\n')
         try:
-            file_test = open(filename + '.mid', 'w')
+            file_test = open(save_path + '.mid', 'w')
             file_test.close()
         except Exception as e:
             print('Incorrect file path given: ' + str(e))
@@ -93,7 +100,7 @@ def get_info():
         else:
             notes_high = notes_high_input
             break
-    return [img_path, filename, duration, draw_mode, notes_high]
+    return [img_path, save_path, duration, draw_mode, notes_high]
 
 
 def get_pixel_averages(total_beats, img_path, notes_high):
@@ -125,7 +132,7 @@ def get_pixel_averages(total_beats, img_path, notes_high):
     return average_colors
 
 
-def write_midi(filename, colors, draw_mode):
+def write_midi(save_path, colors, draw_mode):
     # Create midi object
     midi = MIDIFile(1, file_format=1)
 
@@ -152,7 +159,7 @@ def write_midi(filename, colors, draw_mode):
                 midi.addNote(0, 0, lowest_note + (len(colors) - y), x, 1, color)
 
     # Save midi file
-    with open(filename + '.mid', 'wb') as file:
+    with open(save_path + '.mid', 'wb') as file:
         midi.writeFile(file)
 
 
