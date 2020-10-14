@@ -8,18 +8,34 @@ from tkinter import ttk
 
 
 def window(height=300, width=500):
+    # Window properties
     root = tk.Tk()
     root.resizable(False, False)
     root.title('Img2Midi')
     root.iconbitmap(default='logo.ico')
     ttk.Style().theme_use('vista')
 
-    # Window properties
+    def choose_image_button_func():
+        img_path = filedialog.askopenfilename(filetypes=[('Image files', '*.png *.jpg *.jpeg *.gif')])
+        print(img_path)
+
+    def save_as_button_func():
+        filename = filedialog.asksaveasfilename(filetypes=[('MIDI files', '*.mid')])
+        print(filename)
+
+    # Canvas and Frame
     canvas = tk.Canvas(root, height=height, width=width)
     canvas.pack()
 
     frame = tk.Frame(root, bd=15)
     frame.place(relheight=1, relwidth=1)
+
+    # 1st row: File Dialogs
+    choose_image_button = ttk.Button(frame, text='Choose Image', command=choose_image_button_func)
+    choose_image_button.grid(column=0, row=0, padx=20, ipadx=20, columnspan=2)
+
+    save_as_button = ttk.Button(frame, text='Save as', command=save_as_button_func)
+    save_as_button.grid(column=2, row=0, padx=20, ipadx=20, columnspan=2)
 
     # Start Window
     root.mainloop()
