@@ -2,10 +2,6 @@ from PIL import Image
 from midiutil import MIDIFile
 
 
-def average_color(colors_list):
-    return round(sum(colors_list) / len(colors_list))
-
-
 def get_info():
     duration = 0
     draw_mode = True
@@ -85,7 +81,7 @@ def get_pixel_averages(total_beats, img_path, notes_high):
                 for pixel_x in range(areas[area_y][area_x][2] - areas[area_y][area_x][0]):
                     area_colors.append(img.getpixel((pixel_x + areas[area_y][area_x][0],
                                                      pixel_y + areas[area_y][area_x][1])))
-            average_colors[area_y].append(average_color(area_colors))
+            average_colors[area_y].append(round(sum(area_colors) / len(area_colors)))  # Average color of area
 
     return average_colors
 
