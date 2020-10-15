@@ -198,7 +198,7 @@ def write_midi(save_path, colors, draw_mode):
             display_state('Adding notes to file: Note ' + str_y + ', ' + str_x)
             if draw_mode and color == 0:
                 midi.addNote(0, 0, lowest_note + (len(colors) - y), x, 1, 100)
-            elif not draw_mode and color != 0:
+            elif not draw_mode:
                 midi.addNote(0, 0, lowest_note + (len(colors) - y), x, 1, color)
     display_state('Adding notes to file: Finished')
 
