@@ -120,61 +120,6 @@ def display_state(state=None):
     current_state_label.config(text=state)
 
 
-def get_info():
-    duration = 0
-    draw_mode = True
-    notes_high = 132
-    while 1:
-        img_path = input('Where is your image located?\n')
-        try:
-            file_test = open(img_path, 'r')
-            file_test.close()
-        except Exception as e:
-            print('Incorrect file path given: ' + str(e))
-            continue
-        break
-    while 1:
-        save_path = input('Where should the MIDI file be saved?\n')
-        try:
-            file_test = open(save_path + '.mid', 'w')
-            file_test.close()
-        except Exception as e:
-            print('Incorrect file path given: ' + str(e))
-            continue
-        break
-    while 1:
-        try:
-            duration = int(input('How many seconds long should the MIDI file be?\n'))
-        except ValueError:
-            print('Incorrect duration given!')
-            continue
-        break
-    while 1:
-        draw_mode_input = input('Do you want to use draw mode? (Y/n)\n').upper()
-        if draw_mode_input == 'Y' or draw_mode_input == '':
-            draw_mode = True
-            break
-        elif draw_mode_input == 'N':
-            draw_mode = False
-            break
-        else:
-            print('Incorrect answer!')
-            continue
-    while 1:
-        try:
-            notes_high_input = int(input('How many notes should the image be high? (max 132)\n'))
-        except ValueError:
-            print('Please input a number!')
-            continue
-        if notes_high_input > 132 or notes_high_input < 1:
-            print('Your given number is either too high or too low!')
-            continue
-        else:
-            notes_high = notes_high_input
-            break
-    return [img_path, save_path, duration, draw_mode, notes_high]
-
-
 def get_pixel_averages(total_beats, img_path, notes_high):
     # Open image and convert to grayscale
     display_state('Opening image')
