@@ -33,7 +33,7 @@ def window(height=300, width=550):
     def convert():
         info['duration'] = int(duration_entry_text.get())
         info['notes_high'] = int(height_entry_text.get())
-        info['draw_mode'] = True if draw_mode_checkbutton_state == 1 else False
+        info['draw_mode'] = True if draw_mode_checkbutton_state.get() == 1 else False
 
         if info['img_path'] == '' or info['save_path'] == '':
             messagebox.showerror('Error!', 'You need to give file paths for both input and output first!')
@@ -176,15 +176,15 @@ def write_midi(save_path, colors, draw_mode):
 
     # Convert to black and white if draw mode is on
     if draw_mode:
-        display_state('Converting to black or white: Initiating')
+        display_state('Converting to black and white: Initiating')
         for y in range(len(colors)):
             str_y = (3 - len(str(y))) * '0' + str(y)
             for x, color in enumerate(colors[y]):
                 str_x = (3 - len(str(x))) * '0' + str(x)
-                display_state('Converting to black or white: Color ' + str_y + ', ' + str_x)
+                display_state('Converting to black and white: Color ' + str_y + ', ' + str_x)
                 colors[y][x] = (round((color + 1) / 256) * 256) - 1  # Either -1 or 255
                 colors[y][x] += 1 if colors[y][x] == -1 else 0  # Change -1 to 0
-        display_state('Converting to black or white: Finished')
+        display_state('Converting to black and white: Finished')
 
     # Add all notes
     display_state('Adding notes to file: Calculating lowest note')
