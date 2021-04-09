@@ -48,68 +48,68 @@ def window(height=300, width=550):
     frame = tk.Frame(root, bd=15)
     frame.place(relheight=1, relwidth=1)
 
-    padx = 15
-    pady = 10
+    pad_x = 15
+    pad_y = 10
 
     # 1st row: choose image dialog
     row = 0
 
     choose_image_button = ttk.Button(frame, text='Choose Image', width=20, command=choose_image_button_func)
-    choose_image_button.grid(column=0, row=row, padx=padx, pady=pady)
+    choose_image_button.grid(column=0, row=row, padx=pad_x, pady=pad_y)
 
     choose_image_label = ttk.Label(frame, text='')
-    choose_image_label.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    choose_image_label.grid(column=1, row=row, padx=pad_x, pady=pad_y, sticky='W')
 
     # 2nd row: save as dialog
     row += 1
 
     save_as_button = ttk.Button(frame, text='Save as', width=20, command=save_as_button_func)
-    save_as_button.grid(column=0, row=row, padx=padx, pady=pady)
+    save_as_button.grid(column=0, row=row, padx=pad_x, pady=pad_y)
 
     save_as_label = ttk.Label(frame, text='')
-    save_as_label.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    save_as_label.grid(column=1, row=row, padx=pad_x, pady=pad_y, sticky='W')
 
     # 3rd row: duration input
     row += 1
 
     duration_label = ttk.Label(frame, text='Duration in seconds:')
-    duration_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+    duration_label.grid(column=0, row=row, padx=pad_x, pady=pad_y, sticky='E')
 
     duration_entry_text = tk.StringVar()
     duration_entry_text.set('60')
     duration_entry = ttk.Entry(frame, width=10, textvariable=duration_entry_text, justify='right')
-    duration_entry.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    duration_entry.grid(column=1, row=row, padx=pad_x, pady=pad_y, sticky='W')
 
     # 4th row: height input
     row += 1
 
     height_label = ttk.Label(frame, text='Height in notes:')
-    height_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+    height_label.grid(column=0, row=row, padx=pad_x, pady=pad_y, sticky='E')
 
     height_entry_text = tk.StringVar()
     height_entry_text.set('100')
     height_entry = ttk.Entry(frame, width=10, textvariable=height_entry_text, justify='right')
-    height_entry.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    height_entry.grid(column=1, row=row, padx=pad_x, pady=pad_y, sticky='W')
 
     # 5th row: draw mode toggle
     row += 1
 
     draw_mode_label = ttk.Label(frame, text='Draw Mode:')
-    draw_mode_label.grid(column=0, row=row, padx=padx, pady=pady, sticky='E')
+    draw_mode_label.grid(column=0, row=row, padx=pad_x, pady=pad_y, sticky='E')
 
     draw_mode_checkbutton_state = tk.IntVar()
     draw_mode_checkbutton_state.set(1)
     draw_mode_checkbutton = ttk.Checkbutton(frame, variable=draw_mode_checkbutton_state, takefocus=False)
-    draw_mode_checkbutton.grid(column=1, row=row, padx=padx, pady=pady, sticky='W')
+    draw_mode_checkbutton.grid(column=1, row=row, padx=pad_x, pady=pad_y, sticky='W')
 
     # 6th row: convert button
     row += 1
 
     convert_button = ttk.Button(frame, width=20, text='Convert', command=convert)
-    convert_button.grid(column=0, row=row, padx=padx, pady=pady + 10)
+    convert_button.grid(column=0, row=row, padx=pad_x, pady=pad_y + 10)
 
     current_state_label = ttk.Label(frame, text='')
-    current_state_label.grid(column=1, row=row, padx=padx, pady=pady + 10, sticky='W')
+    current_state_label.grid(column=1, row=row, padx=pad_x, pady=pad_y + 10, sticky='W')
 
     # Start Window
     root.mainloop()
@@ -155,7 +155,8 @@ def get_pixel_averages(total_beats, img_path, notes_high):
                 for pixel_x in range(areas[area_y][area_x][2] - areas[area_y][area_x][0]):
                     area_colors.append(img.getpixel((pixel_x + areas[area_y][area_x][0],
                                                      pixel_y + areas[area_y][area_x][1])))
-            average_colors[area_y].append(round(sum(area_colors) / len(area_colors)))  # Average color of area
+            if area_colors:  # To prevent ZeroDivisionError with badly calculated areas
+                average_colors[area_y].append(round(sum(area_colors) / len(area_colors)))  # Average color of area
     display_state('Calculating average color per area: Finished')
 
     return average_colors
@@ -210,7 +211,7 @@ def write_midi(save_path, colors, draw_mode):
         midi.writeFile(file)
     display_state('Finished!')
     open_explorer = messagebox.askyesno('Finished!', 'The Image was successfully converted to a MIDI file.\n'
-                                        'The result can be found under ' + info['save_path'] +
+                                                     'The result can be found under ' + info['save_path'] +
                                         '\n\nDo you want to open the file explorer?', icon='info')
     if open_explorer:
         save_path_folder = ''
